@@ -2,6 +2,7 @@ package com.spartanitech.website.service;
 
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -15,17 +16,21 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
+    @Value("${spring.mail.username}")
+    private String fromMail;
+
     public void sendMail(String to, String subject, String text) {
 
         try {
+            System.out.println("MAIL METHOD CALLED");
             System.out.println("Trying to send mail to: " + to);
+            System.out.println("From mail: " + fromMail);
 
             MimeMessage message = mailSender.createMimeMessage();
-
             MimeMessageHelper helper =
                     new MimeMessageHelper(message, false, "UTF-8");
 
-            helper.setFrom("spartanitech.hrd@gmail.com", "Spartan I-Tech Team");
+            helper.setFrom(fromMail, "Spartan I-Tech Team");
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(text, false);
@@ -46,7 +51,9 @@ public class EmailService {
                                        String filePath) {
 
         try {
+            System.out.println("HR MAIL METHOD CALLED");
             System.out.println("Trying to send HR mail to: " + to);
+            System.out.println("From mail: " + fromMail);
 
             File resumeFile = new File(filePath);
 
@@ -59,11 +66,10 @@ public class EmailService {
             }
 
             MimeMessage message = mailSender.createMimeMessage();
-
             MimeMessageHelper helper =
                     new MimeMessageHelper(message, true, "UTF-8");
 
-            helper.setFrom("spartanitech.hrd@gmail.com", "Spartan I-Tech HR");
+            helper.setFrom(fromMail, "Spartan I-Tech HR");
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(text, false);
