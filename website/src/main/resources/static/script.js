@@ -155,3 +155,66 @@ document.getElementById("careerForm").addEventListener("submit", async function 
     alert(await response.text());
     this.reset();
 });
+/* =========================
+   MOBILE NAVBAR TOGGLE
+========================= */
+
+function toggleMenu() {
+    document
+        .getElementById("mobileMenu")
+        .classList.toggle("active");
+}
+
+function closeMenu() {
+    document
+        .getElementById("mobileMenu")
+        .classList.remove("active");
+}
+
+/* AUTO CLOSE MENU ON SCROLL */
+
+window.addEventListener("scroll", () => {
+    closeMenu();
+});
+
+/* BUTTON HOVER ANIMATION MOBILE */
+
+document.querySelectorAll(".btn").forEach(btn => {
+
+    btn.addEventListener("touchstart", () => {
+        btn.style.transform = "scale(0.96)";
+    });
+
+    btn.addEventListener("touchend", () => {
+        btn.style.transform = "scale(1)";
+    });
+
+});
+
+/* FLOAT CARD TOUCH EFFECT */
+
+document.querySelectorAll(".float-card").forEach(card => {
+
+    card.addEventListener("touchstart", () => {
+        card.style.transform = "translateY(-8px) scale(1.04)";
+    });
+
+    card.addEventListener("touchend", () => {
+        card.style.transform = "translateY(0px) scale(1)";
+    });
+
+});
+
+/* SERVICE CARD TOUCH EFFECT */
+
+document.querySelectorAll(".service-card").forEach(card => {
+
+    card.addEventListener("touchstart", () => {
+        card.style.transform = "translateY(-10px) scale(1.03)";
+    });
+
+    card.addEventListener("touchend", () => {
+        card.style.transform = "translateY(0px) scale(1)";
+    });
+
+});
