@@ -906,4 +906,146 @@ nav a:hover::after{
     .location{
         background-attachment:scroll;
     }
+    /* ===============================
+   MOBILE VIEW FINAL FIX
+================================ */
+
+    * {
+        box-sizing: border-box;
+    }
+
+    html, body {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    /* Logo size reduce */
+    .logo img,
+    .nav-logo,
+    header img {
+        max-width: 130px !important;
+        height: auto !important;
+    }
+
+    /* Desktop logo also controlled */
+    .logo {
+        max-width: 160px !important;
+    }
+
+    /* Floating animation behind content */
+    .floating,
+    .float,
+    .floating-shape,
+    .shape,
+    .blob,
+    .circle {
+        z-index: 0 !important;
+        pointer-events: none;
+    }
+
+    .hero,
+    .hero-content,
+    .banner-content,
+    .main-content {
+        position: relative;
+        z-index: 2 !important;
+    }
+
+    /* Start Project button overlap fix */
+    .hero-buttons,
+    .hero-btns,
+    .btn-group,
+    .cta-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        align-items: center;
+        justify-content: center;
+        margin-top: 25px;
+    }
+
+    .btn,
+    button,
+    .start-project,
+    .start-btn,
+    .cta-btn {
+        position: relative;
+        z-index: 3;
+        white-space: nowrap;
+    }
+
+    /* Mobile full fix */
+    @media (max-width: 768px) {
+
+        header,
+        .navbar {
+            width: 100%;
+            padding: 12px 16px !important;
+        }
+
+        .logo img,
+        .nav-logo,
+        header img {
+            max-width: 95px !important;
+        }
+
+        .hero,
+        .banner,
+        .home {
+            min-height: auto !important;
+            padding: 90px 18px 50px !important;
+            text-align: center;
+        }
+
+        .hero-content,
+        .banner-content {
+            width: 100% !important;
+            max-width: 100% !important;
+        }
+
+        .hero h1,
+        .banner h1 {
+            font-size: 30px !important;
+            line-height: 1.2 !important;
+        }
+
+        .hero p,
+        .banner p {
+            font-size: 15px !important;
+            line-height: 1.6 !important;
+        }
+
+        .hero-buttons,
+        .hero-btns,
+        .btn-group,
+        .cta-buttons {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .btn,
+        button,
+        .start-project,
+        .start-btn,
+        .cta-btn {
+            width: 100%;
+            max-width: 260px;
+            margin: 0 auto;
+        }
+
+        /* Floating shapes mobile la behind mattum */
+        .floating,
+        .float,
+        .floating-shape,
+        .shape,
+        .blob,
+        .circle {
+            opacity: 0.25 !important;
+            transform: scale(0.7);
+        }
+
+        section {
+            padding: 55px 18px !important;
+        }
+    }
 }
