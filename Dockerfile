@@ -6,7 +6,7 @@ COPY website/ .
 
 RUN chmod +x mvnw
 
-RUN ./mvnw spring-boot:repackage package -DskipTests
+RUN ./mvnw clean package spring-boot:repackage -DskipTests
 
 EXPOSE 8080
 
