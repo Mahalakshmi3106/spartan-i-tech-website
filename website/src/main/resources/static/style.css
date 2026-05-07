@@ -735,4 +735,80 @@ nav a:hover {
     .footer-logo h2 {
         font-size: 24px;
     }
+    /* FIX HERO FLOAT CARD OVERLAP */
+    .hero-visual {
+        width: 42%;
+        height: 430px;
+        position: relative;
+        overflow: visible;
+    }
+
+    .float-card {
+        min-width: 150px;
+        max-width: 170px;
+        text-align: center;
+        white-space: nowrap;
+        z-index: 4;
+    }
+
+    .center-card {
+        z-index: 3;
+    }
+
+    /* Proper separate positions */
+    .f1 {
+        top: 5px !important;
+        left: 40px !important;
+    }
+
+    .f2 {
+        top: 115px !important;
+        right: 10px !important;
+    }
+
+    .f3 {
+        bottom: 90px !important;
+        left: 45px !important;
+    }
+
+    .f4 {
+        bottom: 20px !important;
+        right: 35px !important;
+    }
+
+    /* Mobile/Tablet: cards line by line, no overlap */
+    @media (max-width: 950px) {
+        .hero-visual {
+            width: 100% !important;
+            height: auto !important;
+            display: grid !important;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            justify-items: center;
+            margin-top: 30px;
+        }
+
+        .center-card,
+        .float-card {
+            position: static !important;
+            transform: none !important;
+            animation: none !important;
+        }
+
+        .center-card {
+            grid-column: 1 / -1;
+            width: 230px;
+            height: 125px;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .hero-visual {
+            grid-template-columns: 1fr !important;
+        }
+
+        .float-card {
+            width: 180px;
+        }
+    }
 }
