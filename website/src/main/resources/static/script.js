@@ -158,18 +158,24 @@ document.getElementById("careerForm").addEventListener("submit", async function 
 /* =========================
    MOBILE NAVBAR TOGGLE
 ========================= */
-
 function toggleMenu() {
-    document
-        .getElementById("mobileMenu")
-        .classList.toggle("active");
+    const menu = document.getElementById("mobileMenu");
+    const toggle = document.querySelector(".menu-toggle");
+
+    menu.classList.toggle("active");
+    toggle.classList.toggle("active");
 }
 
 function closeMenu() {
-    document
-        .getElementById("mobileMenu")
-        .classList.remove("active");
+    const menu = document.getElementById("mobileMenu");
+    const toggle = document.querySelector(".menu-toggle");
+
+    menu.classList.remove("active");
+    toggle.classList.remove("active");
 }
+
+
+
 
 /* AUTO CLOSE MENU ON SCROLL */
 
