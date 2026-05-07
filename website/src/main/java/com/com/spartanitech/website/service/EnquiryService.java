@@ -26,25 +26,42 @@ public class EnquiryService {
 
         enquiryRepository.save(enquiry);
 
-        // USER CONFIRMATION MAIL
+        String userMessage =
+                "Dear " + enquiry.getName() + ",\n\n" +
+
+                        "Greetings from Spartan I-Tech.\n\n" +
+
+                        "Thank you for reaching out to Spartan I-Tech. " +
+                        "We have successfully received your enquiry.\n\n" +
+
+                        "Our team will review your requirements and contact you shortly. " +
+                        "We appreciate your interest in our services.\n\n" +
+
+                        "Regards,\n" +
+                        "Spartan I-Tech Team\n\n" +
+
+                        "This is an auto-generated email. Please do not reply to this message.";
+
         emailService.sendMail(
                 enquiry.getEmail(),
-                "Spartan I-Tech - Enquiry Received",
-                "Hi " + enquiry.getName() + ",\n\n" +
-                        "Thanks for contacting Spartan I-Tech.\n" +
-                        "We will contact you soon.\n\n" +
-                        "Regards,\nSpartan I-Tech"
+                "Enquiry Received - Spartan I-Tech",
+                userMessage
         );
 
-        // HR MAIL
+        String hrMessage =
+                "New Enquiry Received\n\n" +
+
+                        "Name    : " + enquiry.getName() + "\n" +
+                        "Email   : " + enquiry.getEmail() + "\n" +
+                        "Phone   : " + enquiry.getPhone() + "\n" +
+                        "Message : " + enquiry.getMessage() + "\n\n" +
+
+                        "Please follow up with the customer.";
+
         emailService.sendMail(
                 "spartanitech.hrd@gmail.com",
                 "New Enquiry - Spartan I-Tech",
-                "New enquiry received:\n\n" +
-                        "Name: " + enquiry.getName() + "\n" +
-                        "Email: " + enquiry.getEmail() + "\n" +
-                        "Phone: " + enquiry.getPhone() + "\n" +
-                        "Message: " + enquiry.getMessage()
+                hrMessage
         );
     }
 }
