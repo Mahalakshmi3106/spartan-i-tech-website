@@ -1,49 +1,79 @@
 package com.spartanitech.website.service;
 
-import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.util.Base64;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 @Service
 public class EmailService {
 
-    @Autowired
-    private JavaMailSender mailSender;
+    @Value("${BREVO_API_KEY}")
+    private String brevoApiKey;
 
-    @Value("${spring.mail.username}")
-    private String fromMail;
+    private final String FROM_EMAIL = "spartanitech.hrd@gmail.com";
+
+    // =========================
+    // NORMAL MAIL
+    // =========================
 
     public void sendMail(String to, String subject, String text) {
 
         try {
+
             System.out.println("MAIL METHOD CALLED");
-            System.out.println("Trying to send mail to: " + to);
-            System.out.println("From mail: " + fromMail);
 
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper =
-                    new MimeMessageHelper(message, false, "UTF-8");
+            JSONObject sender = new JSONObject();
+            sender.put("name", "Spartan I-Tech Team");
+            sender.put("email", FROM_EMAIL);
 
-            helper.setFrom(fromMail, "Spartan I-Tech Team");
-            helper.setTo(to);
-            helper.setSubject(subject);
-            helper.setText(text, false);
+            JSONObject receiver = new JSONObject();
+            receiver.put("email", to);
 
-            mailSender.send(message);
+            JSONArray toArray = new JSONArray();
+            toArray.put(receiver);
 
-            System.out.println("Mail sent successfully to: " + to);
+            JSONObject body = new JSONObject();
+
+            body.put("sender", sender);
+            body.put("to", toArray);
+            body.put("subject", subject);
+            body.put("textContent", text);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://api.brevo.com/v3/smtp/email"))
+                    .header("accept", "application/json")
+                    .header("api-key", brevoApiKey)
+                    .header("content-type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
+                    .build();
+
+            HttpClient client = HttpClient.newHttpClient();
+
+            HttpResponse<String> response =
+                    client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("MAIL RESPONSE: " + response.body());
 
         } catch (Exception e) {
-            System.out.println("Mail sending failed to: " + to);
+
+            System.out.println("MAIL FAILED");
             e.printStackTrace();
         }
     }
+
+    // =========================
+    // MAIL WITH ATTACHMENT
+    // =========================
 
     public void sendMailWithAttachment(String to,
                                        String subject,
@@ -51,38 +81,65 @@ public class EmailService {
                                        String filePath) {
 
         try {
+
             System.out.println("HR MAIL METHOD CALLED");
-            System.out.println("Trying to send HR mail to: " + to);
-            System.out.println("From mail: " + fromMail);
 
-            File resumeFile = new File(filePath);
+            File file = new File(filePath);
 
-            System.out.println("Resume Path: " + resumeFile.getAbsolutePath());
-            System.out.println("Resume Exists: " + resumeFile.exists());
+            if (!file.exists()) {
 
-            if (!resumeFile.exists()) {
                 System.out.println("Resume file not found");
                 return;
             }
 
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper =
-                    new MimeMessageHelper(message, true, "UTF-8");
+            byte[] fileBytes = Files.readAllBytes(file.toPath());
 
-            helper.setFrom(fromMail, "Spartan I-Tech HR");
-            helper.setTo(to);
-            helper.setSubject(subject);
-            helper.setText(text, false);
+            String encodedFile =
+                    Base64.getEncoder().encodeToString(fileBytes);
 
-            FileSystemResource file = new FileSystemResource(resumeFile);
-            helper.addAttachment(file.getFilename(), file);
+            JSONObject sender = new JSONObject();
+            sender.put("name", "Spartan I-Tech HR");
+            sender.put("email", FROM_EMAIL);
 
-            mailSender.send(message);
+            JSONObject receiver = new JSONObject();
+            receiver.put("email", to);
 
-            System.out.println("HR mail with attachment sent to: " + to);
+            JSONArray toArray = new JSONArray();
+            toArray.put(receiver);
+
+            JSONObject attachment = new JSONObject();
+            attachment.put("content", encodedFile);
+            attachment.put("name", file.getName());
+
+            JSONArray attachments = new JSONArray();
+            attachments.put(attachment);
+
+            JSONObject body = new JSONObject();
+
+            body.put("sender", sender);
+            body.put("to", toArray);
+            body.put("subject", subject);
+            body.put("textContent", text);
+            body.put("attachment", attachments);
+
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://api.brevo.com/v3/smtp/email"))
+                    .header("accept", "application/json")
+                    .header("api-key", brevoApiKey)
+                    .header("content-type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
+                    .build();
+
+            HttpClient client = HttpClient.newHttpClient();
+
+            HttpResponse<String> response =
+                    client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            System.out.println("HR MAIL RESPONSE: " + response.body());
 
         } catch (Exception e) {
-            System.out.println("HR mail failed to: " + to);
+
+            System.out.println("HR MAIL FAILED");
             e.printStackTrace();
         }
     }
