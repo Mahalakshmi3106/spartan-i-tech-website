@@ -20,7 +20,7 @@ public class EmailService {
     @Value("${BREVO_API_KEY}")
     private String brevoApiKey;
 
-    private final String FROM_EMAIL = "spartanitech.hrd@gmail.com";
+    private final String FROM_EMAIL = "Spartanitech.hrd@gmail.com";
 
     // =========================
     // NORMAL MAIL
